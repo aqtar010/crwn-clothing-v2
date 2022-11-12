@@ -1,8 +1,8 @@
-const NavBar=()=>{
+const Shop=()=>{
     return (
         <h1>
             I am shop page
         </h1>
     )
 }
-export default NavBar;
+export default Shop;

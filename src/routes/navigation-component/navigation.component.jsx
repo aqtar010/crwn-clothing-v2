@@ -1,11 +1,17 @@
-import { Outlet,Link } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { Fragment } from "react/cjs/react.production.min";
 const Navigation = () => {
   return (
     <Fragment>
       <div className="navigation">
-      <div>Logo</div>
-      <div className='nav-links-container'></div>
+        <Link className='logo-container' to='/'>
+          <div>Logo</div>
+        </Link>
+        <div className="nav-links-container">
+          <Link className="nav-link" to="/shop">
+            Shoppes
+          </Link>
+        </div>
       </div>
       <Outlet />
     </Fragment>
