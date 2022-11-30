@@ -3,7 +3,7 @@ import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
 } from "../../Utils/firebase/firebase.utils";
-import "./sign-up-form.component.scss";
+import './sign-up-form.component.scss'
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 
@@ -84,7 +84,7 @@ const SignUpForm = () => {
           type="password"
           required
           onChange={handleChange}
-          name="Confirm password"
+          name="confirmPassword"
           value={confirmPassword}
         />
 
