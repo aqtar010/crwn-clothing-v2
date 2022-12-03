@@ -5,23 +5,30 @@ import {
 import "./sign-in-form.styles.scss";
 import FormInput from "../../components/form-input/form-input.component";
 import Button from "../../components/button/button.component";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { UserContext } from "../../context/user.context";
+
+const defaultFormFields = {
+  email: "",
+  password: "",
+};
 
 const SignInForm = () => {
-  const logGoogleUser = async () => {
+  const [formFields, setFormFields] = useState(defaultFormFields);
+  const { email, password } = formFields;
+
+  const { setCurrentUser}=useContext(UserContext)
+
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
+  };
+
+  const SignInWithGoogle = async () => {
     const { user } = await signInWithGooglePopup();
     const userDocRef = await createUserDocumentFromAuth(user);
     console.log(userDocRef);
   };
-
-  const defaultFormFields = {
-    email: "",
-    password: "",
-  };
-
-  const [formFields, setFormFields] = useState(defaultFormFields);
-  const { email, password } = formFields;
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,6 +42,7 @@ const SignInForm = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user.accessToken);
+        setCurrentUser(user)
       })
       .catch((error) => {
         switch (error.code) {
@@ -49,6 +57,7 @@ const SignInForm = () => {
             break;
         }
       });
+    resetFormFields();
   };
 
   return (
@@ -76,7 +85,7 @@ const SignInForm = () => {
           <Button type="submit" onClick={handelSubmit}>
             Sign In
           </Button>
-          <Button type='button' buttonType={"google"} onClick={logGoogleUser}>
+          <Button type="button" buttonType={"google"} onClick={SignInWithGoogle}>
             Google Sign in
           </Button>
         </div>
