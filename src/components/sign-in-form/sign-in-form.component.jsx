@@ -1,13 +1,11 @@
 import {
   signInWithGooglePopup,
-  createUserDocumentFromAuth,
+  signInAuthWithEmailAndPassword,
 } from "../../Utils/firebase/firebase.utils";
 import "./sign-in-form.styles.scss";
 import FormInput from "../../components/form-input/form-input.component";
 import Button from "../../components/button/button.component";
-import { useState, useContext } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { UserContext } from "../../context/user.context";
+import { useState } from "react";
 
 const defaultFormFields = {
   email: "",
@@ -18,16 +16,12 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { setCurrentUser}=useContext(UserContext)
-
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
 
   const SignInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    const userDocRef = await createUserDocumentFromAuth(user);
-    console.log(userDocRef);
+    await signInWithGooglePopup();
   };
 
   const handleChange = (event) => {
@@ -37,27 +31,22 @@ const SignInForm = () => {
 
   const handelSubmit = async (event) => {
     event.preventDefault();
-    const auth = getAuth();
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user.accessToken);
-        setCurrentUser(user)
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case "auth/wrong-password":
-            alert("Incorrect Password for Email");
-            break;
-          case "auth/user-not-found":
-            alert("No use associated with this Email");
-            break;
-          default:
-            console.log(error);
-            break;
-        }
-      });
-    resetFormFields();
+    try {
+      await signInAuthWithEmailAndPassword(email, password);
+      resetFormFields();
+    } catch (error) {
+      switch (error.code) {
+        case "auth/wrong-password":
+          alert("Incorrect Password for Email");
+          break;
+        case "auth/user-not-found":
+          alert("No use associated with this Email");
+          break;
+        default:
+          console.log(error);
+          break;
+      }
+    }
   };
 
   return (
@@ -85,7 +74,11 @@ const SignInForm = () => {
           <Button type="submit" onClick={handelSubmit}>
             Sign In
           </Button>
-          <Button type="button" buttonType={"google"} onClick={SignInWithGoogle}>
+          <Button
+            type="button"
+            buttonType={"google"}
+            onClick={SignInWithGoogle}
+          >
             Google Sign in
           </Button>
         </div>
