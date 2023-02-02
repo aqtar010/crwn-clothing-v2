@@ -21,8 +21,13 @@
       display: flex;
       flex-direction: column;
       overflow:  auto;
+      .cart-item-empty {
+        margin-top: 100px;
+        margin-left: 50px;
+      }
+      
     }
-  
+    
     button {
       margin-top: auto;
     }
