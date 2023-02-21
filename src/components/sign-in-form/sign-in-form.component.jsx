@@ -1,17 +1,18 @@
+import { useState } from 'react';
+
+import FormInput from '../form-input/form-input.component';
+import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
+
 import {
+  signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
-  signInAuthWithEmailAndPassword,
-} from "../../Utils/firebase/firebase.utils";
-import {SignInContainer,ButtonsContainer} from  "./sign-in-form.styles.jsx";
-import FormInput from "../../components/form-input/form-input.component";
-import Button, {
-  BUTTON_TYPE_CLASSES,
-} from "../../components/button/button.component";
-import { useState } from "react";
+} from '../../utils/firebase/firebase.utils';
+
+import { SignInContainer, ButtonsContainer } from './sign-in-form.styles';
 
 const defaultFormFields = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 const SignInForm = () => {
@@ -22,66 +23,57 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   };
 
-  const SignInWithGoogle = async () => {
+  const signInWithGoogle = async () => {
     await signInWithGooglePopup();
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      await signInAuthUserWithEmailAndPassword(email, password);
+      resetFormFields();
+    } catch (error) {
+      console.log('user sign in failed', error);
+    }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
 
-  const handelSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await signInAuthWithEmailAndPassword(email, password);
-      resetFormFields();
-    } catch (error) {
-      switch (error.code) {
-        case "auth/wrong-password":
-          alert("Incorrect Password for Email");
-          break;
-        case "auth/user-not-found":
-          alert("No use associated with this Email");
-          break;
-        default:
-          console.log(error);
-          break;
-      }
-    }
+    setFormFields({ ...formFields, [name]: value });
   };
 
   return (
     <SignInContainer>
-      <h2>Already have an Account?</h2>
-      <span>Sign In With Email and Password</span>
-      <form onSubmit={handelSubmit}>
+      <h2>Already have an account?</h2>
+      <span>Sign in with your email and password</span>
+      <form onSubmit={handleSubmit}>
         <FormInput
-          label="Email"
-          type="email"
+          label='Email'
+          type='email'
           required
           onChange={handleChange}
-          name="email"
+          name='email'
           value={email}
         />
+
         <FormInput
-          label="Password"
-          type="password"
+          label='Password'
+          type='password'
           required
           onChange={handleChange}
-          name="password"
+          name='password'
           value={password}
         />
         <ButtonsContainer>
-          <Button type="submit" onClick={handelSubmit}>
-            Sign In
-          </Button>
+          <Button type='submit'>Sign In</Button>
           <Button
-            type="button"
             buttonType={BUTTON_TYPE_CLASSES.google}
-            onClick={SignInWithGoogle}
+            type='button'
+            onClick={signInWithGoogle}
           >
-            Google Sign in
+            Sign In With Google
           </Button>
         </ButtonsContainer>
       </form>

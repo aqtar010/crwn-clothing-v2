@@ -1,10 +1,11 @@
-import { useContext } from "react";
-import { CategoriesContext } from "../../context/categories.contexts";
-import CategoryPreview from "../../components/category-preview/category-preview.component";
-import { Fragment } from "react/cjs/react.production.min";
+import { useContext, Fragment } from 'react';
+
+import { CategoriesContext } from '../../contexts/categories.context';
+import CategoryPreview from '../../components/category-preview/category-preview.component';
 
 const CategoriesPreview = () => {
   const { categoriesMap } = useContext(CategoriesContext);
+
   return (
     <Fragment>
       {Object.keys(categoriesMap).map((title) => {
@@ -16,4 +17,5 @@ const CategoriesPreview = () => {
     </Fragment>
   );
 };
+
 export default CategoriesPreview;
