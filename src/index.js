@@ -13,11 +13,11 @@ const rootElement = document.getElementById("root");
 render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
+      {/* <PersistGate persistor={persistor}> */}
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </PersistGate>
+      {/* </PersistGate> */}
     </Provider>
   </React.StrictMode>,
   rootElement
